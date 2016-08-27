@@ -180,6 +180,15 @@ namespace GitLink
 
                 var compilables = project.GetCompilableItems().Select(x => x.GetFullFileName()).ToList();
 
+                if (!compilables.Any())
+                {
+                    if (Path.GetExtension(project.FullPath).ToLowerInvariant() == ".xproj")
+                    {
+                        // Try get all .cs project items for dotnet project
+                        compilables = Directory.EnumerateFiles(Path.GetDirectoryName(project.FullPath), "*.cs", SearchOption.AllDirectories).ToList();
+                    }
+                }
+
                 var outputPdbFile = project.GetOutputPdbFile();
                 var projectPdbFile = pathPdbDirectory != null ? Path.Combine(pathPdbDirectory, Path.GetFileName(outputPdbFile)) : Path.GetFullPath(outputPdbFile);
                 var projectSrcSrvFile = projectPdbFile + ".srcsrv";

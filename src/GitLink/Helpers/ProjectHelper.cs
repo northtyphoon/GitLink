@@ -53,7 +53,8 @@ namespace GitLink
                 {
                     var isKnownToBeMsBuildFormat = ObjectHelper.AreEqual(projectInSolution.ProjectType, KnownToBeMsBuildFormat);
                     var isSelectedForBuild = ProjectIsSelectedForBuild(projectInSolution, configurationName, platformName);
-                    if (!isKnownToBeMsBuildFormat || !isSelectedForBuild)
+                    var isDotNetCoreProject = Path.GetExtension(projectInSolution.RelativePath).ToLowerInvariant() == ".xproj";
+                    if (!isDotNetCoreProject && (!isKnownToBeMsBuildFormat || !isSelectedForBuild))
                     {
                         continue;
                     }
